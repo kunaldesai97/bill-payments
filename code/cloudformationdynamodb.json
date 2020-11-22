@@ -1,0 +1,72 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+      "tableBiller": {
+        "Type": "AWS::DynamoDB::Table",
+        "Properties": {
+          "TableName": "Biller",
+          "AttributeDefinitions": [
+            {
+              "AttributeName": "biller_id",
+              "AttributeType": "S"
+            }
+          ],
+          "KeySchema": [
+            {
+              "AttributeName": "biller_id",
+              "KeyType": "HASH"
+            }
+          ],
+          "ProvisionedThroughput": {
+            "ReadCapacityUnits": "5",
+            "WriteCapacityUnits": "5"
+          }
+        }
+      },
+      "tableBill": {
+        "Type": "AWS::DynamoDB::Table",
+        "Properties": {
+          "TableName": "Bill",
+          "AttributeDefinitions": [
+            {
+              "AttributeName": "bill_id",
+              "AttributeType": "S"
+            }
+          ],
+          "KeySchema": [
+            {
+              "AttributeName": "bill_id",
+              "KeyType": "HASH"
+            }
+          ],
+          "ProvisionedThroughput": {
+            "ReadCapacityUnits": "5",
+            "WriteCapacityUnits": "5"
+          }
+        }
+      },
+      "tableUsers": {
+        "Type": "AWS::DynamoDB::Table",
+        "Properties": {
+          "TableName": "User",
+          "AttributeDefinitions": [
+            {
+              "AttributeName": "user_id",
+              "AttributeType": "S"
+            }
+          ],
+          "KeySchema": [
+            {
+              "AttributeName": "user_id",
+              "KeyType": "HASH"
+            }
+          ],
+          "ProvisionedThroughput": {
+            "ReadCapacityUnits": "5",
+            "WriteCapacityUnits": "5"
+          }
+        }
+      }
+    },
+    "Description": "DynamoDB"
+  }
