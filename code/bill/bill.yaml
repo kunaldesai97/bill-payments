@@ -1,0 +1,78 @@
+#
+# CMPT 756 Term Project
+#
+# k8s yaml to deploy a service:
+#   1 Deployment - this governs the logic (container)
+#   1 Service - this opens up the logic
+#   1 Service Account - this enable access control
+#
+# Notes:
+#
+# 1. the Service's .spec.ports[0] need to matches the Deployment's
+#    .spec.template.spec.containers[0].ports
+# 2. Deployment's .spec.template.spec.containers.livenessProbe & readinessProbe
+#    can be removed to clean up the logs
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: billservice
+  labels:
+    app: billservice
+spec:
+  ports:
+  - port: 30001
+    name: http
+  selector:
+    app: billservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: svc-bill
+  labels:
+    account: SVC_Bill
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billservice
+  labels:
+    app: billservice
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billservice
+      version: v1
+  template:
+    metadata:
+      name: bill-pod
+      labels:
+        app: billservice
+        version: v1
+    spec:
+      serviceAccountName: svc-bill
+      containers:
+      - name: billservice
+        image: docker.io/<common_organisation_name>/billservice:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 30001
+        livenessProbe:
+          httpGet:
+            path: /api/v1/bill/health
+            port: 30001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /api/v1/bill/readiness
+            port: 30001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 5
