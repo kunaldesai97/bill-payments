@@ -22,7 +22,7 @@ dynamodb = boto3.resource('dynamodb',
 
 # Change the implementation of this: you should probably have a separate driver class for interfacing with a db like dynamodb in a different file.
 
-@bp.route('/update', methods=['PUT'])
+@bp.route('/', methods=['PUT'])
 def update():
     headers = request.headers
     # check header here
@@ -45,7 +45,7 @@ def update():
                                 ExpressionAttributeValues=attrvals)
     return response
 
-@bp.route('/read', methods=['GET'])
+@bp.route('/', methods=['GET'])
 def read():
     headers = request.headers
     # check header here
@@ -57,7 +57,7 @@ def read():
     response = table.query(Select='ALL_ATTRIBUTES', KeyConditionExpression=Key(table_id).eq(objkey))
     return response
 
-@bp.route('/write', methods=['POST'])
+@bp.route('/', methods=['POST'])
 def write():
     headers = request.headers
     # check header here
@@ -76,7 +76,7 @@ def write():
         returnval = {"message": "fail"}
     return json.dumps(({table_id: payload[table_id]}, returnval)['returnval' in globals()])
 
-@bp.route('/delete', methods=['DELETE'])
+@bp.route('/', methods=['DELETE'])
 def delete():
     headers = request.headers
     # check header here
