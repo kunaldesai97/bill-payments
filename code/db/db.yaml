@@ -16,15 +16,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cmpt756db
+  name: projectdb
   labels:
-    app: cmpt756db
+    app: projectdb
 spec:
   ports:
   - port: 30002
     name: http
   selector:
-    app: cmpt756db
+    app: projectdb
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -36,27 +36,27 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cmpt756db
+  name: projectdb
   labels:
-    app: cmpt756db
+    app: projectdb
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cmpt756db
+      app: projectdb
       version: v1
   template:
     metadata:
       name: database-pod
       labels:
-        app: cmpt756db
+        app: projectdb
         version: v1
     spec:
       serviceAccountName: svc-db
       containers:
-      - name: cmpt756db
-        image: docker.io/kdesai1505/cmpt756db:latest
+      - name: dbcontainer
+        image: docker.io/t4project/projectdb:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 30002

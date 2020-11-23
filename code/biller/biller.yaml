@@ -55,8 +55,8 @@ spec:
     spec:
       serviceAccountName: svc-biller
       containers:
-      - name: service3
-        image: docker.io/project756/billerservice:latest
+      - name: billercontainer
+        image: docker.io/t4project/billerservice:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 30003

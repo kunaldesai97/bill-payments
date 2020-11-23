@@ -55,8 +55,8 @@ spec:
     spec:
       serviceAccountName: svc-bill
       containers:
-      - name: billservice
-        image: docker.io/project756/billservice:latest
+      - name: billcontainer
+        image: docker.io/t4project/billservice:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 30001
