@@ -16,15 +16,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: billerservice
+  name: billercontainer
   labels:
-    app: billerservice
+    app: billercontainer
 spec:
   ports:
   - port: 30003
     name: http
   selector:
-    app: billerservice
+    app: billercontainer
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -36,27 +36,27 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: billerservice
+  name: billercontainer
   labels:
-    app: billerservice
+    app: billercontainer
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: billerservice
+      app: billercontainer
       version: v1
   template:
     metadata:
       name: biller-pod
       labels:
-        app: billerservice
+        app: billercontainer
         version: v1
     spec:
       serviceAccountName: svc-biller
       containers:
-      - name: billercontainer
-        image: docker.io/t4project/billerservice:latest
+      - name: service3
+        image: docker.io/t4project/billercontainer:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 30003

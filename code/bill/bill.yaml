@@ -16,15 +16,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: billservice
+  name: billcontainer
   labels:
-    app: billservice
+    app: billcontainer
 spec:
   ports:
   - port: 30001
     name: http
   selector:
-    app: billservice
+    app: billcontainer
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -36,27 +36,27 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: billservice
+  name: billcontainer
   labels:
-    app: billservice
+    app: billcontainer
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: billservice
+      app: billcontainer
       version: v1
   template:
     metadata:
       name: bill-pod
       labels:
-        app: billservice
+        app: billcontainer
         version: v1
     spec:
       serviceAccountName: svc-bill
       containers:
-      - name: billcontainer
-        image: docker.io/t4project/billservice:latest
+      - name: service2
+        image: docker.io/t4project/billcontainer:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 30001

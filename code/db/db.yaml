@@ -16,15 +16,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: projectdb
+  name: dbcontainer
   labels:
-    app: projectdb
+    app: dbcontainer
 spec:
   ports:
   - port: 30002
     name: http
   selector:
-    app: projectdb
+    app: dbcontainer
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -36,27 +36,27 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: projectdb
+  name: dbcontainer
   labels:
-    app: projectdb
+    app: dbcontainer
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: projectdb
+      app: dbcontainer
       version: v1
   template:
     metadata:
       name: database-pod
       labels:
-        app: projectdb
+        app: dbcontainer
         version: v1
     spec:
       serviceAccountName: svc-db
       containers:
       - name: dbcontainer
-        image: docker.io/t4project/projectdb:latest
+        image: docker.io/t4project/dbcontainer:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 30002

@@ -32,7 +32,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: cmpt756termproject
+  name: cmpt756e4
 spec:
   hosts:
   - "*"
@@ -46,7 +46,7 @@ spec:
       uri: /api/v1/user
     route:
     - destination:
-        host: userservice
+        host: usercontainer
         port:
           number: 30000
   - match:
@@ -56,7 +56,7 @@ spec:
       uri: /api/v1/bill
     route:
     - destination:
-        host: billservice
+        host: billcontainer
         port:
           number: 30001
   - match:
@@ -66,6 +66,6 @@ spec:
       uri: /api/v1/biller
     route:
     - destination:
-        host: billerservice
+        host: billercontainer
         port:
           number: 30003

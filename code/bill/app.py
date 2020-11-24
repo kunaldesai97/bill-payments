@@ -10,7 +10,7 @@ from flask import Blueprint
 app = Flask(__name__)
 
 db = {
-    "name": "http://<DB_NAME>:30002/api/v1/datastore",
+    "name": "http://dbcontainer:30002/api/v1/datastore",
     "endpoint": [
         "read",
         "write",
@@ -42,6 +42,7 @@ def get_bill(bill_id):
     response = requests.get(url, params = payload, headers = {'Authorization': headers['Authorization']})
     return (response.json())
 
+
 @bill_bp.route('/', methods=['POST'])
 def create_bill():
     headers = request.headers
@@ -50,18 +51,17 @@ def create_bill():
         return Response(json.dumps({"error": "You don't have permission to generate a bill. Please use authorization token."}), status=401, mimetype='application/json')
     try:
         content = request.get_json()
-        User_ID = content['user_id']
-        Bill_ID = content['bill_id']
-        Biller_ID = content['biller_id']
-        Bill_Amount = content['bill_amount']
-        Due_Date = content['due_date']
-        # By default making Is_Bill_Paid false as soon as bill is generated
-        Is_Bill_Paid = False
+        userid = content['userid']
+        billerid = content['billerid']
+        bill_amount = content['bill_amount']
+        due_date = content['due_date']
+        bill_paid = content['bill_paid']
     except: 
         return json.dumps({"message": "Error reading arguments"})
     url = db['name'] + '/' + db['endpoint'][1]
-    response = requests.post(url, json = {"objtype": "bill", "UserID":User_ID,"BillID":Bill_ID, "BillerID":Biller_ID, "Amount": Bill_Amount,"DueDate":Due_Date,"BillStatus":Is_Bill_Paid}, headers = {'Authorization': headers['Authorization']})
+    response = requests.post(url, json = {"objtype": "bill", "userid":userid, "billerid":billerid, "bill_amount": bill_amount,"due_date":due_date,"bill_paid":bill_paid}, headers = {'Authorization': headers['Authorization']})
     return (response.json())
+
 
 @bill_bp.route('/<bill_id>', methods=['DELETE'])
 def delete_bill(bill_id):
@@ -82,7 +82,6 @@ def pay_bill(bill_id):
         return Response(json.dumps({"error": "Authorize to pay bills"}), status=401, mimetype='application/json')
     try:
         content = request.get_json()
-        #Bill_ID = content['bill_id']
         Biller_ID = content['biller_id']
         CC_Number = content['cc_number']
         CC_EXP_DATE = content['cc_exp_date']

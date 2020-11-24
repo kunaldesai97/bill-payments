@@ -10,7 +10,7 @@ from flask import Blueprint
 app = Flask(__name__)
 
 db = {
-    "name": "http://projectdb:30002/api/v1/datastore",
+    "name": "http://dbcontainer:30002/api/v1/datastore",
     "endpoint": [
         "read",
         "write",
@@ -36,7 +36,7 @@ def list_all():
     return {}
 
 @bp.route('/<biller_id>', methods=['GET'])
-def get_biller(music_id):
+def get_biller(biller_id):
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
@@ -56,7 +56,6 @@ def create_biller():
         content = request.get_json()
         Biller = content['Biller']
         Description = content['Description']
-
     except: 
         return json.dumps({"message": "error reading arguments"})
     url = db['name'] + '/' + db['endpoint'][1]
