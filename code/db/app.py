@@ -88,6 +88,18 @@ def delete():
     response = table.delete_item(Key={table_id: objkey})
     return response
 
+@bp.route('/scan', methods=['GET'])
+def scan():
+    headers = request.headers
+    # check header here
+    objtype = urllib.parse.unquote_plus(request.args.get('objtype'))
+    objkey = urllib.parse.unquote_plus(request.args.get('objkey'))
+    table_name = objtype.capitalize()
+    table = dynamodb.Table(table_name)
+    response = table.scan(Select='ALL_ATTRIBUTES', FilterExpression = Attr('user_id').eq(objkey))
+    return response
+
+
 @bp.route('/health')
 def health():
     return Response("", status=200, mimetype="application/json")

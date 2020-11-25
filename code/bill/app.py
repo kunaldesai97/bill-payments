@@ -7,6 +7,8 @@ import urllib
 from flask import request
 from flask import Response
 from flask import Blueprint
+from datetime import datetime
+
 app = Flask(__name__)
 
 db = {
@@ -16,6 +18,7 @@ db = {
         "write",
         "delete",
         "update",
+        "scan",
     ]
 }
 
@@ -51,15 +54,15 @@ def create_bill():
         return Response(json.dumps({"error": "You don't have permission to generate a bill. Please use authorization token."}), status=401, mimetype='application/json')
     try:
         content = request.get_json()
-        userid = content['userid']
-        billerid = content['billerid']
+        user_id = content['user_id']
+        biller_id = content['biller_id']
         bill_amount = content['bill_amount']
         due_date = content['due_date']
         bill_paid = content['bill_paid']
     except: 
         return json.dumps({"message": "Error reading arguments"})
     url = db['name'] + '/' + db['endpoint'][1]
-    response = requests.post(url, json = {"objtype": "bill", "userid":userid, "billerid":billerid, "bill_amount": bill_amount,"due_date":due_date,"bill_paid":bill_paid}, headers = {'Authorization': headers['Authorization']})
+    response = requests.post(url, json = {"objtype": "bill", "user_id":user_id, "biller_id":biller_id, "bill_amount": bill_amount,"due_date":due_date,"bill_paid":bill_paid}, headers = {'Authorization': headers['Authorization']})
     return (response.json())
 
 
@@ -82,33 +85,30 @@ def pay_bill(bill_id):
         return Response(json.dumps({"error": "Authorize to pay bills"}), status=401, mimetype='application/json')
     try:
         content = request.get_json()
-        Biller_ID = content['biller_id']
-        CC_Number = content['cc_number']
-        CC_EXP_DATE = content['cc_exp_date']
-        CC_CVV = content['cc_cvv']
-        # By default making it true as soon as bill is paid
-        Is_Bill_Paid = True
+        cc_first_four_digits = content['cc_number'][:4]
+        cc_last_four_digits = content['cc_number'][-4:]
+        cc_exp_date = content['cc_exp_date']
+        payment_date = str(datetime.today().strftime("%B %d %Y"))
+        bill_paid = content['bill_paid']
     except:
         return json.dumps({"message": "Error reading arguments"})
     url = db['name'] + '/' + db['endpoint'][3]
-    response = requests.put(url, json={"objtype": "bill", "BillID": bill_id, "BillerID": Biller_ID, "CC_Number": CC_Number,
-                                        "CC_EXP_DATE": CC_EXP_DATE, "CC_CVV": CC_CVV, "BillStatus":Is_Bill_Paid},
+    response = requests.put(url, params = {"objtype": "bill", "objkey": bill_id}, json={"cc_first_four_digits":cc_first_four_digits,"cc_last_four_digits":cc_last_four_digits,"cc_exp_date":cc_exp_date,"payment_date":payment_date,"bill_paid":bill_paid},
                              headers={'Authorization': headers['Authorization']})
     return (response.json())
 
-"""
-@bill_bp.route('/<user_id>', methods=['GET'])
+
+@bill_bp.route('/users/<user_id>', methods=['GET'])
 def get_bills_user(user_id):
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
         return Response(json.dumps({"error": "Permission denied. You can't retrieve the following bill without authorization."}), status=401, mimetype='application/json')
-    payload = {"objtype": "bill", "objkey": bill_id}
-    url = db['name'] + '/' + db['endpoint'][0]
+    payload = {"objtype": "bill", "objkey": user_id}
+    url = db['name'] + '/' + db['endpoint'][4]
     response = requests.get(url, params = payload, headers = {'Authorization': headers['Authorization']})
-    for bill in response['Items']:
-        return (bill[user_id])
-"""
+    return (response.json())
+
 
 # Register the created blueprint
 app.register_blueprint(bill_bp, url_prefix='/api/v1/bill/')
