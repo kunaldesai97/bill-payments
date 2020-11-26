@@ -23,8 +23,11 @@ CURL=curl
 PODS1=pod/billservice-57c6994db6-lhmn6
 PODCONT=service1
 
+PODS2=pod/billercontainer-678d867b47-n2r89
+PODCONT=service3
+
 logs:
-	$(KC) logs $(PODS1) -c $(PODCONT)
+	$(KC) logs $(PODS2) -c $(PODCONT)
 
 #
 # Replace this with the external IP/DNS name of your cluster
@@ -34,8 +37,9 @@ logs:
 # directly 'kubectl -n istio-system get service istio-ingressgateway'
 
 
-IGW=10.98.38.131:80
+#IGW=10.98.38.131:80
 #IGW=aa950744aa9db4c21b66eece5344f695-1630890617.us-east-1.elb.amazonaws.com:80
+IGW=52.149.246.230:80
 
 # stock body & fragment for API requests
 BODY_USER= { \
@@ -65,8 +69,8 @@ BODY_UID= { \
 }
 
 BODY_BILLER= { \
-  "Biller": "BC Hydro", \
-  "Description": "Electricity" \
+  "biller": "BC Hydro", \
+  "description": "Electricity" \
 }
 
 # this is a token for ???

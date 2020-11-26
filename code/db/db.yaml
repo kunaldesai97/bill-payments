@@ -21,7 +21,7 @@ metadata:
     app: dbcontainer
 spec:
   ports:
-  - port: 30002
+  - port: 30003
     name: http
   selector:
     app: dbcontainer
@@ -59,18 +59,18 @@ spec:
         image: docker.io/t4project/dbcontainer:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 30002
+        - containerPort: 30003
         livenessProbe:
           httpGet:
             path: /api/v1/datastore/health
-            port: 30002
+            port: 30003
           initialDelaySeconds: 10
           periodSeconds: 5
           failureThreshold: 5
         readinessProbe:
           httpGet:
             path: /api/v1/datastore/readiness
-            port: 30002
+            port: 30003
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 2

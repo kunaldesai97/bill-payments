@@ -10,7 +10,7 @@ from flask import Blueprint
 app = Flask(__name__)
 
 db = {
-    "name": "http://dbcontainer:30002/api/v1/datastore",
+    "name": "http://dbcontainer:30003/api/v1/datastore",
     "endpoint": [
         "read",
         "write",
@@ -54,7 +54,9 @@ def create_biller():
         description = content['description']
     except: 
         return json.dumps({"message": "Error reading arguments"})
+    # biller_bp.logger.info('Hitting db')
     url = db['name'] + '/' + db['endpoint'][1]
+    # biller_bp.logger.info('Successfully biller record created')
     response = requests.post(url, json = {"objtype": "biller", "biller": biller, "description": description}, headers = {'Authorization': headers['Authorization']})
     return (response.json())
 
@@ -79,4 +81,4 @@ if __name__ == '__main__':
         sys.exit(-1)
 
     p = int(sys.argv[1])
-    app.run(host='0.0.0.0', port=p, threaded=True)
+    app.run(host='0.0.0.0', port=p, debug=True, threaded=True)
