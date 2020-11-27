@@ -36,31 +36,37 @@ logs:
 # You can use either 'make -f eks.m extern' or 'make -f mk.m extern' or
 # directly 'kubectl -n istio-system get service istio-ingressgateway'
 
+# Minikube External IP
+IGW=10.108.29.202:80
 
-#IGW=10.98.38.131:80
+# AWS External IP	
 #IGW=aa950744aa9db4c21b66eece5344f695-1630890617.us-east-1.elb.amazonaws.com:80
-IGW=52.149.246.230:80
+
+# Azure External IP
+#IGW=52.149.246.230:80
 
 # stock body & fragment for API requests
 BODY_USER= { \
-"fname": "Sherlock", \
-"email": "shomles@baker.org", \
-"lname": "Holmes" \
+"fname": "John New", \
+"uname": "john.doe@test.org", \
+"lname": "doe1", \
+"secquestion": "pet animal", \
+"secanswer": "duck" \
 }
 
 
 BODY_BILL= { \
-"user_id": "123", \
-"biller_id": "fido@can.org", \
-"bill_amount": "35", \
-"due_date": "23 March 2021", \
-"bill_paid": "False" \
+"user_id": "test@gmail.com", \
+"biller_id": "telus@can.org", \
+"bill_amount": "50", \
+"due_date": "March 25 2021", \
+"bill_paid": "false" \
 }
 
 PAY_BILL={ \
-"cc_number": "1234567893456894", \
-"cc_exp_date": "3 March 2024", \
-"bill_paid": "True" \
+"cc_number": "450556789349966", \
+"cc_exp_date": "April 5 2024", \
+"bill_paid": "true" \
 }
 
 
@@ -69,8 +75,8 @@ BODY_UID= { \
 }
 
 BODY_BILLER= { \
-  "biller": "BC Hydro", \
-  "description": "Electricity" \
+  "biller": "BC Hydro1", \
+  "description": "Electricity1" \
 }
 
 # this is a token for ???
@@ -79,12 +85,17 @@ BODY_TOKEN={ \
     "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzQ5MTVhMTAtNGMzYi00ZDg4LThiZDAtZDk5OWYxNDBlZDJhIiwidGltZSI6MTYwNDA0Mzk2MS44ODU5NjZ9.cCsA5iMZG6TQ_DeCP5mAdT_I5b2mSz5mhCh5gp1r1jU" \
 }
 
-# keep these ones around
-USER_ID=f84a897c-cb15-474a-a10c-41d56664fc4f
-BILL_ID=827cc197-10e4-4357-9be0-eb7342e13928
+# Used in user apis
+USER_ID=0f41e85c-4bad-479c-9ec9-bc2846dfb98c
 
-# it's convenient to have a second set of id to test deletion (DELETE uses these id with the suffix of 2)
-USER_ID2=rohan@sfu.ca
+# Used in bill apis
+BILL_ID=52de2849-cab1-4b12-9bfe-0230a4756dd8
+
+# Used in biller apis
+BILLER_ID = 534eb082-49f2-4c2e-9186-14f67161b8f5
+
+# Used for getting a user's bill in guserbill api
+USER_ID2=123
 
 # CREATE a bill
 cbill:
@@ -108,18 +119,33 @@ dbill:
 
 # GET a user's bill
 guserbill:
-	echo curl --location --request GET 'http://$(IGW)/api/v1/bill/users/$(USER_ID2)' --header '$(TOKEN)' > gbill.out
-	$(CURL) --location --request GET 'http://$(IGW)/api/v1/bill/users/$(USER_ID2)' --header '$(TOKEN)' | tee -a gbill.out
+	echo curl --location --request GET 'http://$(IGW)/api/v1/bill/users/$(USER_ID2)' --header '$(TOKEN)' > userbills.out
+	$(CURL) --location --request GET 'http://$(IGW)/api/v1/bill/users/$(USER_ID2)' --header '$(TOKEN)' | tee -a userbills.out
 
 # CREATE a biller
 cbiller:
 	echo curl --location --request POST 'http://$(IGW)/api/v1/biller/' --header '$(TOKEN)' --header 'Content-Type: application/json' --data-raw '$(BODY_BILLER)' > cbiller.out
 	$(CURL) --location --request POST 'http://$(IGW)/api/v1/biller/' --header '$(TOKEN)' --header 'Content-Type: application/json' --data-raw '$(BODY_BILLER)' | tee -a cbiller.out
 
+# DELETE a biller
+dbiller:
+	echo curl --location --request DELETE 'http://$(IGW)/api/v1/biller/$(BILLER_ID)' --header '$(TOKEN)' > dbiller.out
+	$(CURL) --location --request DELETE 'http://$(IGW)/api/v1/biller/$(BILLER_ID)' --header '$(TOKEN)' | tee -a dbiller.out
+
+# GET a biller
+gbiller:
+	echo curl --location --request GET 'http://$(IGW)/api/v1/biller/$(BILLER_ID)' --header '$(TOKEN)' > gbiller.out
+	$(CURL) --location --request GET 'http://$(IGW)/api/v1/biller/$(BILLER_ID)' --header '$(TOKEN)' | tee -a gbiller.out
+
 # CREATE a user
 cuser:
 	echo curl --location --request POST 'http://$(IGW)/api/v1/user/' --header 'Content-Type: application/json' --data-raw '$(BODY_USER)' > cuser.out
 	$(CURL) --location --request POST 'http://$(IGW)/api/v1/user/' --header 'Content-Type: application/json' --data-raw '$(BODY_USER)' | tee -a cuser.out
+
+# GET a user
+ruser:
+	echo curl --location --request GET 'http://$(IGW)/api/v1/user/$(USER_ID)' --header '$(TOKEN)' > ruser.out
+	$(CURL) --location --request GET 'http://$(IGW)/api/v1/user/$(USER_ID)' --header '$(TOKEN)' | tee -a ruser.out
 
 # UPDATE a user
 uuser:
@@ -128,8 +154,8 @@ uuser:
 
 # DELETE a user
 duser:
-	echo curl --location --request DELETE 'http://$(IGW)/api/v1/user/$(USER_ID2)' --header '$(TOKEN)' > duser.out
-	$(CURL) --location --request DELETE 'http://$(IGW)/api/v1/user/$(USER_ID2)' --header '$(TOKEN)' | tee -a duser.out
+	echo curl --location --request DELETE 'http://$(IGW)/api/v1/user/$(USER_ID)' --header '$(TOKEN)' > duser.out
+	$(CURL) --location --request DELETE 'http://$(IGW)/api/v1/user/$(USER_ID)' --header '$(TOKEN)' | tee -a duser.out
 
 # LOGIN as a user
 apilogin:

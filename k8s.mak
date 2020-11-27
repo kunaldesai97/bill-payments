@@ -36,6 +36,7 @@ db: db.svc.log
 
 allyaml:
 	$(KC) -n $(NS) apply -f code/db/db.yaml
+	$(KC) -n $(NS) apply -f code/user/user.yaml
 	$(KC) -n $(NS) apply -f code/bill/bill.yaml
 	$(KC) -n $(NS) apply -f code/biller/biller.yaml
 	$(KC) -n $(NS) apply -f IaC/k8s/service-gateway.yaml

@@ -1,0 +1,34 @@
+<----------------------------- BEFORE STARTING MINIKUBE ------------------------->
+
+### Update AWS credentials with your secret keys
+sudo nano ~/.aws/credentials (MacOS)
+
+### After code checkout add and update DB config.json with your AWS secret keys (code/db/config.json)
+
+### See if tables are present in DynamoDB, must return 3 tables (User, Bill, Biller)
+aws dynamodb list-tables 
+
+<----------------------------- MINIKUBE STEPS ------------------------->
+
+minikube start
+
+cd <LOCAL PATH OF repo (term-project-t4-wednesday)>
+make -f mk.mak reinstate
+
+minikube tunnel (open in new cmd window)
+ 
+kubectl -n istio-system get service istio-ingressgateway
+
+### Apply all manifests
+make -f k8s.mak allyaml 
+
+### List all pods, containers, deployments
+make -f k8s.mak ls 
+
+
+### Test APIs
+make -f api.mak cuser
+
+make -f api.mak cbill
+
+make -f api.mak cbiller

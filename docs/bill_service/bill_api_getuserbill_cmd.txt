@@ -1,0 +1,4 @@
+
+<---------------- Get user's bill in AWS CLI --------------->
+# for user_id = 123
+aws dynamodb scan --table-name Bill --filter-expression 'user_id = :g' --expression-attribute-values '{":g": {"S":"123"}}'
