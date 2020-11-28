@@ -73,7 +73,7 @@ PAY_BILL={ \
 
 
 BODY_UID= { \
-    "uid": "74915a10-4c3b-4d88-8bd0-d999f140ed2a" \
+    "uid": "63beb370-5438-43e2-89d1-7b9c4b748f4d" \
 }
 
 BODY_BILLER= { \
@@ -94,7 +94,7 @@ USER_ID=0f41e85c-4bad-479c-9ec9-bc2846dfb98c
 BILL_ID=52de2849-cab1-4b12-9bfe-0230a4756dd8
 
 # Used in biller apis
-BILLER_ID = 534eb082-49f2-4c2e-9186-14f67161b8f5
+BILLER_ID = 0c914681-7d0d-4bdc-87f7-42059dc20047
 
 # Used for getting a user's bill in guserbill api
 USER_ID2=123
