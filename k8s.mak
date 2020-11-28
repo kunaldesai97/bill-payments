@@ -14,13 +14,13 @@
 
 
 # specify yor DockerHub id here
-REGID=rohanharode
+REGID=t4project
 
 KC=kubectl
 DK=docker
 
 # these might need to change
-NS=cmpt756e4
+NS=termproject
 
 
 deploy: gw s1 s2 db

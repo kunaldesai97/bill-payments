@@ -21,7 +21,7 @@ metadata:
     app: usercontainer
 spec:
   ports:
-  - port: 30000
+  - port: 5003
     name: http
   selector:
     app: usercontainer
@@ -59,18 +59,18 @@ spec:
         image: docker.io/t4project/usercontainer:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 30000
+        - containerPort: 5003
         livenessProbe:
           httpGet:
             path: /api/v1/user/health
-            port: 30000
+            port: 5003
           initialDelaySeconds: 10
           periodSeconds: 5
           failureThreshold: 5
         readinessProbe:
           httpGet:
             path: /api/v1/user/readiness
-            port: 30000
+            port: 5003
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 2

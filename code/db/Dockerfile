@@ -7,6 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY config.json .
 COPY app.py .
 
-EXPOSE 30003
+EXPOSE 5000
 
-CMD ["python", "app.py", "30003"]
+CMD ["python", "app.py", "5000"]

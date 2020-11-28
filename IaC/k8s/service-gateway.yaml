@@ -32,33 +32,13 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: cmpt756e4
+  name: termproject
 spec:
   hosts:
   - "*"
   gateways:
   - my-gateway
   http:
-  - match:
-    - uri:
-        prefix: /api/v1/user
-    rewrite:
-      uri: /api/v1/user
-    route:
-    - destination:
-        host: usercontainer
-        port:
-          number: 30000
-  - match:
-    - uri:
-        prefix: /api/v1/bill
-    rewrite:
-      uri: /api/v1/bill
-    route:
-    - destination:
-        host: billcontainer
-        port:
-          number: 30001
   - match:
     - uri:
         prefix: /api/v1/biller
@@ -68,4 +48,24 @@ spec:
     - destination:
         host: billercontainer
         port:
-          number: 30002
+          number: 5001
+  - match:
+    - uri:
+        prefix: /api/v1/bill
+    rewrite:
+      uri: /api/v1/bill
+    route:
+    - destination:
+        host: billcontainer
+        port:
+          number: 5002
+  - match:
+    - uri:
+        prefix: /api/v1/user
+    rewrite:
+      uri: /api/v1/user
+    route:
+    - destination:
+        host: usercontainer
+        port:
+          number: 5003

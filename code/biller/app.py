@@ -7,73 +7,79 @@ import urllib
 from flask import request
 from flask import Response
 from flask import Blueprint
+from datetime import datetime
+
 app = Flask(__name__)
 
 db = {
-    "name": "http://dbcontainer:30003/api/v1/datastore",
+    "name": "http://dbcontainer:5000/api/v1/datastore",
     "endpoint": [
         "read",
         "write",
         "delete",
+        "update",
+        "scan",
     ]
 }
 
 # Create a Flask blueprint
-biller_bp = Blueprint('app', __name__)
+bp = Blueprint('app', __name__)
 
-@biller_bp.route('/health')
+@bp.route('/health')
 def health():
     return Response("", status=200, mimetype="application/json")
 
-@biller_bp.route('/readiness')
+@bp.route('/readiness')
 def readiness():
     return Response("", status=200, mimetype="application/json")
 
 
-@biller_bp.route('/<biller_id>', methods=['GET'])
+@bp.route('/<biller_id>', methods=['GET'])
 def get_biller(biller_id):
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
-        return Response(json.dumps({"error": "Permission denied. You can't retrieve the following bill without authorization."}), status=401, mimetype='application/json')
+        return Response(json.dumps({"error": "missing auth"}), status=401, mimetype='application/json')
     payload = {"objtype": "biller", "objkey": biller_id}
     url = db['name'] + '/' + db['endpoint'][0]
     response = requests.get(url, params = payload, headers = {'Authorization': headers['Authorization']})
     return (response.json())
 
 
-@biller_bp.route('/', methods=['POST'])
+@bp.route('/', methods=['POST'])
 def create_biller():
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
-        return Response(json.dumps({"error": "You don't have permission to generate a bill. Please use authorization token."}), status=401, mimetype='application/json')
+        return Response(json.dumps({"error": "missing auth"}), status=401, mimetype='application/json')
     try:
         content = request.get_json()
+        # user_id = content['user_id']
+        # biller_id = content['biller_id']
+        # bill_amount = content['bill_amount']
+        # due_date = content['due_date']
+        # bill_paid = content['bill_paid']
         biller = content['biller']
         description = content['description']
     except: 
         return json.dumps({"message": "Error reading arguments"})
-    # biller_bp.logger.info('Hitting db')
     url = db['name'] + '/' + db['endpoint'][1]
-    # biller_bp.logger.info('Successfully biller record created')
     response = requests.post(url, json = {"objtype": "biller", "biller": biller, "description": description}, headers = {'Authorization': headers['Authorization']})
     return (response.json())
 
 
-@biller_bp.route('/<biller_id>', methods=['DELETE'])
+@bp.route('/<biller_id>', methods=['DELETE'])
 def delete_biller(biller_id):
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
-        return Response(json.dumps({"error": "Permission denied due to missing authorization token."}), status=401, mimetype='application/json')
+        return Response(json.dumps({"error": "missing auth"}), status=401, mimetype='application/json')
     url = db['name'] + '/' + db['endpoint'][2]
     response = requests.delete(url, params = { "objtype": "biller", "objkey": biller_id}, headers = {'Authorization': headers['Authorization']})
     return (response.json())
 
-
 # Register the created blueprint
-app.register_blueprint(biller_bp, url_prefix='/api/v1/biller/')
+app.register_blueprint(bp, url_prefix='/api/v1/biller/')
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -81,4 +87,4 @@ if __name__ == '__main__':
         sys.exit(-1)
 
     p = int(sys.argv[1])
-    app.run(host='0.0.0.0', port=p, debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=p, threaded=True)

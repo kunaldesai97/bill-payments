@@ -23,8 +23,8 @@ CURL=curl
 PODS1=pod/billservice-57c6994db6-lhmn6
 PODCONT=service1
 
-PODS2=pod/billercontainer-678d867b47-n2r89
-PODCONT=service3
+PODS2=pod/billercontainer-6c4db676f9-8m7w4
+PODCONT=billercontainer
 
 logs:
 	$(KC) logs $(PODS2) -c $(PODCONT)
@@ -37,13 +37,15 @@ logs:
 # directly 'kubectl -n istio-system get service istio-ingressgateway'
 
 # Minikube External IP
-IGW=10.108.29.202:80
+# IGW=10.108.29.202:80
+IGW=127.0.0.1:80
 
 # AWS External IP	
 #IGW=aa950744aa9db4c21b66eece5344f695-1630890617.us-east-1.elb.amazonaws.com:80
 
 # Azure External IP
 #IGW=52.149.246.230:80
+
 
 # stock body & fragment for API requests
 BODY_USER= { \
@@ -75,8 +77,8 @@ BODY_UID= { \
 }
 
 BODY_BILLER= { \
-  "biller": "BC Hydro1", \
-  "description": "Electricity1" \
+  "biller": "Fortis BC", \
+  "description": "Electricity and Natural Gas" \
 }
 
 # this is a token for ???

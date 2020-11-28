@@ -21,7 +21,7 @@ metadata:
     app: billcontainer
 spec:
   ports:
-  - port: 30001
+  - port: 5002
     name: http
   selector:
     app: billcontainer
@@ -59,18 +59,18 @@ spec:
         image: docker.io/t4project/billcontainer:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 30001
+        - containerPort: 5002
         livenessProbe:
           httpGet:
             path: /api/v1/bill/health
-            port: 30001
+            port: 5002
           initialDelaySeconds: 10
           periodSeconds: 5
           failureThreshold: 5
         readinessProbe:
           httpGet:
             path: /api/v1/bill/readiness
-            port: 30001
+            port: 5002
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 2

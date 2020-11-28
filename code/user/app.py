@@ -12,7 +12,7 @@ from flask import Blueprint
 app = Flask(__name__)
 bp = Blueprint('app', __name__)
 db = {
-    "name": "http://dbcontainer:30003/api/v1/datastore",
+    "name": "http://dbcontainer:5000/api/v1/datastore",
     "endpoint": [
         "read",
         "write",
