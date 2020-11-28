@@ -22,10 +22,10 @@ IC=istioctl
 
 
 # these might need to change
-NS=cmpt756e4
+NS=termproject
 CLUSTER=minikube
 CTX=minikube
-DRIVER=virtualbox
+DRIVER=docker
 
 # developed and tested again 1.19.2
 KVER=1.19.2
