@@ -102,7 +102,10 @@ def login():
     data = response.json()
     if len(data['Items']) > 0:
         encoded = jwt.encode({'user_id': uid, 'time': time.time()}, 'secret', algorithm='HS256')
+    else:
+        return json.dumps({"message": "user does not exist"})
     return encoded
+    
 
 @bp.route('/logoff', methods=['PUT'])
 def logoff():
