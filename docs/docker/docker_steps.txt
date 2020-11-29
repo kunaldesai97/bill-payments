@@ -4,16 +4,16 @@
 ### t4project is our organization for this project
 
 docker build -t t4project/dbcontainer:latest /Users/darklord/term-project-t4-wednesday/code/db
-docker run --publish 30003:30003 --detach --name db t4project/dbcontainer:latest
+docker run --publish 5000:5000 --detach --name db t4project/dbcontainer:latest
 
 docker build -t t4project/usercontainer:latest /Users/darklord/term-project-t4-wednesday/code/user
-docker run --publish 30000:30000 --detach --name user t4project/usercontainer:latest
+docker run --publish 5003:5003 --detach --name user t4project/usercontainer:latest
 
 docker build -t t4project/billcontainer:latest /Users/darklord/term-project-t4-wednesday/code/bill
-docker run --publish 30001:30001 --detach --name bill t4project/billcontainer:latest
+docker run --publish 5002:5002 --detach --name bill t4project/billcontainer:latest
 
 docker build -t t4project/billercontainer:latest /Users/darklord/term-project-t4-wednesday/code/biller
-docker run --publish 30002:30002 --detach --name biller t4project/billercontainer:latest
+docker run --publish 5001:5001 --detach --name biller t4project/billercontainer:latest
 
 
 PUSH images to Dockerhub (registry) using Docker desktop or docker push command
