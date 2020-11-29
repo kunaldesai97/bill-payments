@@ -1,0 +1,8 @@
+<------------------------------- GATLING Steps ------------------------------->
+
+cd <LOCAL_PATH to Gatling Folder>/bin
+
+./recorder.sh (to capture events and create Gatling script)
+
+./gatling.sh (run simulations)
+Select the simulation you just ran
