@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "c64920dd-2a09-4e7e-bfb0-b5fc29df05b2",
+		"name": "Bill Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Bill",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"rharod@gmail.com\",\n    \"biller_id\": \"shawbcurve@can.org\",\n    \"bill_amount\": \"55\",\n    \"due_date\": \"March 23 2022\",\n    \"bill_paid\": \"false\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/bill/",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"bill",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Bill",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3c641554-5bb1-4fdc-8eb1-fc690b69828b",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/bill/97558999-5ccd-4ffd-b9d2-03e8be57ba74",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"bill",
+						"97558999-5ccd-4ffd-b9d2-03e8be57ba74"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Bill",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/bill/97558999-5ccd-4ffd-b9d2-03e8be57ba74",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"bill",
+						"97558999-5ccd-4ffd-b9d2-03e8be57ba74"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a user's bill",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/bill/users/6a6ac575-f492-422c-b4b8-9058035e8ff0",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"bill",
+						"users",
+						"6a6ac575-f492-422c-b4b8-9058035e8ff0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pay Bill",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cc_number\": \"450756789349566\",\n    \"cc_exp_date\": \"April 5 2024\",\n    \"bill_paid\": \"true\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/bill/pay/b21c672a-9ad9-4f1c-b87d-d80faff6d843",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"bill",
+						"pay",
+						"b21c672a-9ad9-4f1c-b87d-d80faff6d843"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Bearer Token}}",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "{{Bearer Token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "116f3241-b5b1-4ba0-8828-f516f5d984ed",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "e6a85416-9e54-4246-9aa1-77bc49179a3c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

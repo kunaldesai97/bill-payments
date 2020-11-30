@@ -1,0 +1,204 @@
+{
+	"info": {
+		"_postman_id": "21ee4eaf-437a-47f1-af88-c78ba803fb87",
+		"name": "User Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fname\": \"John\",\n    \"uname\": \"jdoe\",\n    \"lname\": \"Doe\",\n    \"secquestion\": \"pet animal\",\n    \"secanswer\": \"cat\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/user/",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/user/4c4ad25c-bafb-4963-a4b2-4e208d2c2e53",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"4c4ad25c-bafb-4963-a4b2-4e208d2c2e53"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/user/4c4ad25c-bafb-4963-a4b2-4e208d2c2e53",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"4c4ad25c-bafb-4963-a4b2-4e208d2c2e53"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fname\": \"John\",\n    \"uname\": \"jdoe\",\n    \"lname\": \"Doe\",\n    \"secquestion\": \"hometown\",\n    \"secanswer\": \"Belgium\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/user/4c4ad25c-bafb-4963-a4b2-4e208d2c2e53",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"4c4ad25c-bafb-4963-a4b2-4e208d2c2e53"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\": \"4c4ad25c-bafb-4963-a4b2-4e208d2c2e53\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/user/login",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"jwt\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzQ5MTVhMTAtNGMzYi00ZDg4LThiZDAtZDk5OWYxNDBlZDJhIiwidGltZSI6MTYwNDA0Mzk2MS44ODU5NjZ9.cCsA5iMZG6TQ_DeCP5mAdT_I5b2mSz5mhCh5gp1r1jU\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{IGW}}/api/v1/user/logoff",
+					"protocol": "http",
+					"host": [
+						"{{IGW}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"logoff"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Bearer Token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "9bb65fc5-47fc-4a3f-8d38-94ab406217ce",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "5312118d-1488-40a9-9102-8340b6a03353",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
