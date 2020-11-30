@@ -4,7 +4,9 @@ cd <LOCAL_PATH_repo>
 
 make -f az.mak connect
 
-make -f az.mak restart
+make -f az.mak show
+
+make -f az.mak restart (only when cluster not running)
 
 make -f az.mak reinstate
 
