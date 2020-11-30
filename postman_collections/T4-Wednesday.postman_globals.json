@@ -1,0 +1,14 @@
+{
+	"id": "ff2d0f8b-cf92-4e30-850a-1aca10741265",
+	"values": [
+		{
+			"key": "Bearer Token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMDI3Yzk5ZWYtM2UxMi00ZmM5LWFhYzgtMTcyZjg3N2MyZDI0IiwidGltZSI6MTYwMTA3NDY0NC44MTIxNjg2fQ.hR5Gbw5t2VMpLcj8yDz1B6tcWsWCFNiHB_KHpvQVNls",
+			"enabled": true
+		}
+	],
+	"name": "T4-Wednesday Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2020-11-30T02:03:06.265Z",
+	"_postman_exported_using": "Postman/8.0.0-201127-1222"
+}
