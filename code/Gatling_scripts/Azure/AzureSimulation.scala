@@ -1,6 +1,5 @@
 
 import scala.concurrent.duration._
-
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
@@ -14,10 +13,13 @@ class AzureSimulation extends Simulation {
 		.acceptEncodingHeader("gzip, deflate")
 		.authorizationHeader("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzQ5MTVhMTAtNGMzYi00ZDg4LThiZDAtZDk5OWYxNDBlZDJhIiwidGltZSI6MTYwNDA0Mzk2MS44ODU5NjZ9.cCsA5iMZG6TQ_DeCP5mAdT_I5b2mSz5mhCh5gp1r1jU")
 		.userAgentHeader("PostmanRuntime/7.26.8")
+    
+    val path = "/Users/kunal/cmpt756-2/term-project-t4-wednesday/code/Gatling_scripts/Azure"
 
-    val user_details = csv("user.csv").random
-    val biller_details = csv("biller.csv").random
-    val bill_details = csv("bill.csv").random
+    val user_details = csv(path.concat("/user.csv")).random
+    val biller_details = csv(path.concat("/biller.csv")).random
+    val bill_details = csv(path.concat("/bill.csv")).random
+    val pay_details = csv(path.concat("/pay.csv")).random
 
     val createUser = http("Create New User")
     .post("/api/v1/user/")
@@ -48,10 +50,19 @@ class AzureSimulation extends Simulation {
     .delete("/api/v1/user/$(user_id)")
 
     val deleteBiller = http("Delete Biller")
-    .delete("/api/v1/user/$(biller_id)")
+    .delete("/api/v1/biller/$(biller_id)")
 
     val deleteBill = http("Delete Bill")
-    .delete("/api/v1/user/$(bill_id)")
+    .delete("/api/v1/bill/$(bill_id)")
+
+    val getBill = http("Get Bill")
+    .get("/api/v1/bill/$(bill_id)")
+
+    val payBill = http("Pay Bill")
+    .put("/api/v1/bill/pay/$(bill_id)")
+    .formParam("cc_number", "$(cc_number)")    
+    .formParam("cc_exp_date", "$(cc_exp_date)")
+    .formParam("bill_paid", "$(bill_paid)")
 
 
     object Create{
@@ -74,11 +85,21 @@ class AzureSimulation extends Simulation {
 
     }
 
+    
+    val pay = feed(bill_details)
+    .exec(getBill)
+    .feed(pay_details)
+    .exec(payBill)
+
+
     // Assign roles
     val admins = scenario("Admins").exec(Create.cuser, Create.cbiller)
     val billers = scenario("Billers").exec(Create.cbill)
+    val users = scenario("Users").exec(pay)
 
-
+    setUp(admins.inject(atOnceUsers(2)),
+        billers.inject(atOnceUsers(2)),
+        users.inject(atOnceUsers(10))).protocols(httpProtocol)
 
 
     // Create User
@@ -203,5 +224,5 @@ class AzureSimulation extends Simulation {
 	// 	// .pause(37)
 		
 
-	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	
 }
