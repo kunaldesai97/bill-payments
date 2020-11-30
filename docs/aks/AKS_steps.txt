@@ -1,0 +1,18 @@
+<-------------------------------------- Azure (AKS) Steps --------------------------------------->
+
+cd <LOCAL_PATH_repo>
+
+make -f az.mak connect
+
+make -f az.mak restart
+
+make -f az.mak reinstate
+
+make -f az.mak extern
+
+make -f k8s.mak allyaml
+
+make -f k8s.mak ls
+
+### Call APIs
+make -f api.mak ruser

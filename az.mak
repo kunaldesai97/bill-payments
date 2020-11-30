@@ -65,11 +65,11 @@ lsd:
 # do this whenever you create/restart your cluster
 # NB: You must rename the long context name down to $(CTX) before using this
 reinstate:
-	$(KC) config use-context $(CTX) | tee -a eks-reinstate.log
-	$(KC) create ns $(NS) | tee -a eks-reinstate.log
-	$(KC) config set-context $(CTX) --namespace=$(NS) | tee -a eks-reinstate.log
-	$(KC) label ns $(NS) istio-injection=enabled | tee -a eks-reinstate.log
-	$(IC) install --set profile=demo | tee -a eks-reinstate.log
+	$(KC) config use-context $(CTX) | tee -a aks-reinstate.log
+	$(KC) create ns $(NS) | tee -a aks-reinstate.log
+	$(KC) config set-context $(CTX) --namespace=$(NS) | tee -a aks-reinstate.log
+	$(KC) label ns $(NS) istio-injection=enabled | tee -a aks-reinstate.log
+	$(IC) install --set profile=demo | tee -a aks-reinstate.log
 	
 showcontext:
 	$(KC) config get-contexts
