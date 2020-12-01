@@ -58,6 +58,12 @@ class AzureSimulation extends Simulation {
     val getBill = http("Get Bill")
     .get("/api/v1/bill/$(bill_id)")
 
+	val getUser = http("Get User")
+	.get("/api/v1/user/$(user_id)")
+
+	val getBiller = http("Get Biller")
+	.get("/api/v1/biller/$(biller_id)")
+
     val payBill = http("Pay Bill")
     .put("/api/v1/bill/pay/$(bill_id)")
     .formParam("cc_number", "$(cc_number)")    
@@ -85,6 +91,19 @@ class AzureSimulation extends Simulation {
 
     }
 
+	object Get{
+
+		val guser = feed(user_details)
+		.exec(getUser)
+
+		val gbill = feed(bill_details)
+		.exec(getBill)
+
+		val gbiller = feed(biller_details)
+		.exec(getBiller)
+
+	}
+
     
     val pay = feed(bill_details)
     .exec(getBill)
@@ -93,13 +112,29 @@ class AzureSimulation extends Simulation {
 
 
     // Assign roles
-    val admins = scenario("Admins").exec(Create.cuser, Create.cbiller)
-    val billers = scenario("Billers").exec(Create.cbill)
-    val users = scenario("Users").exec(pay)
+    val admins = scenario("Admins")
+    .forever(){
+		repeat(20){
+			exec(Create.cuser, Create.cbiller, Get.guser, Get.gbiller)
+		}
+    }
+    val billers = scenario("Billers")
+    .forever(){
+		repeat(20){
+			 exec(Create.cbill, Get.gbill)
+		}
+       
+    }
+    val users = scenario("Users")
+    .forever(){
+		repeat(20){
+			exec(pay)
+		}
+    }
 
-    setUp(admins.inject(atOnceUsers(2)),
-        billers.inject(atOnceUsers(2)),
-        users.inject(atOnceUsers(10))).protocols(httpProtocol)
+    setUp(admins.inject(atOnceUsers(50)),
+        billers.inject(atOnceUsers(50)),
+        users.inject(atOnceUsers(50))).protocols(httpProtocol).maxDuration(30 minutes)
 
 
     // Create User
