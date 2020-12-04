@@ -1,0 +1,10 @@
+{
+  "simulation": "LoadSimulation",
+  "simulationId": "loadsimulation",
+  "start": 1607070826769,
+  "description": "Load Simulation Azure",
+  "scenarios": ["Admins", "Billers", "Users"],
+  "assertions": [
+
+  ]
+}
