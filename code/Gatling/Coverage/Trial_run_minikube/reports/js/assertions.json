@@ -1,0 +1,10 @@
+{
+  "simulation": "termproject.MinikubeSimulation",
+  "simulationId": "minikubesimulation",
+  "start": 1607122816297,
+  "description": "minikube coverage test",
+  "scenarios": ["MinikubeSimulation"],
+  "assertions": [
+
+  ]
+}
