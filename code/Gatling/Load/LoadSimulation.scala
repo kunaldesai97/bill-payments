@@ -12,133 +12,121 @@ class LoadSimulation extends Simulation {
 		.acceptHeader("*/*")
 		.acceptEncodingHeader("gzip, deflate")
 		.authorizationHeader("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzQ5MTVhMTAtNGMzYi00ZDg4LThiZDAtZDk5OWYxNDBlZDJhIiwidGltZSI6MTYwNDA0Mzk2MS44ODU5NjZ9.cCsA5iMZG6TQ_DeCP5mAdT_I5b2mSz5mhCh5gp1r1jU")
-		.userAgentHeader("PostmanRuntime/7.26.8")
-    
-    val path = "/Users/kunal/cmpt756-2/term-project-t4-wednesday/code/Gatling/Load"
-
-    val user_details = csv(path.concat("/user.csv")).random
-    val biller_details = csv(path.concat("/biller.csv")).random
-    val bill_details = csv(path.concat("/bill.csv")).random
-    val pay_details = csv(path.concat("/pay.csv")).random
-
-    val createUser = http("Create New User")
-    .post("/api/v1/user/")
-    .formParam("user_id", "$(user_id)")
-    .formParam("fname", "$(fname)")
-    .formParam("lname", "$(lname)")
-    .formParam("secanswer", "$(secanswer)")
-    .formParam("secquestion", "$(secquestion)")
-    .formParam("uname", "$(uname)")
-
-    val createBiller = http("Create New Biller")
-    .post("/api/v1/biller/")
-    .formParam("biller_id", "$(biller_id)")
-    .formParam("biller", "$(biller)")
-    .formParam("description", "$(description)")
-
-    val createBill = http("Create New Bill")
-    .post("/api/v1/bill/")
-    .formParam("bill_id", "$(bill_id)")
-    .formParam("bill_amount", "$(bill_amount)")
-    .formParam("bill_paid", "$(bill_paid)")
-    .formParam("bill_id", "$(bill_id)")
-    .formParam("due_date", "$(due_data)")
-    .formParam("user_id", "$(user_id)")
-
-
-    val deleteUser = http("Delete User")
-    .delete("/api/v1/user/$(user_id)")
-
-    val deleteBiller = http("Delete Biller")
-    .delete("/api/v1/biller/$(biller_id)")
-
-    val deleteBill = http("Delete Bill")
-    .delete("/api/v1/bill/$(bill_id)")
-
-    val getBill = http("Get Bill")
-    .get("/api/v1/bill/$(bill_id)")
-
-	val getUser = http("Get User")
-	.get("/api/v1/user/$(user_id)")
-
-	val getBiller = http("Get Biller")
-	.get("/api/v1/biller/$(biller_id)")
-
-    val payBill = http("Pay Bill")
-    .put("/api/v1/bill/pay/$(bill_id)")
-    .formParam("cc_number", "$(cc_number)")    
-    .formParam("cc_exp_date", "$(cc_exp_date)")
-    .formParam("bill_paid", "$(bill_paid)")
-
-    val getUserBill = http("Get User Bill")
-    .get("/api/v1/bill/users/$(user_id)")
-
-    object Create{
-
-        val cuser = feed(user_details)
-        // Delete User if already exists, or else duplicate id error 
-        .exec(deleteUser)
-        .exec(createUser)
-
-        val cbiller = feed(biller_details)
-        // Delete Biller if already exists, or else duplicate id error 
-        .exec(deleteBiller)
-        .exec(createBiller)
-
-        val cbill = feed(bill_details)
-        // Delete Biller if already exists, or else duplicate id error 
-        .exec(deleteBill)
-        .exec(createBill)
-
-
-    }
-
-	object Get{
-
-	val guser = feed(user_details)
-	.exec(getUser)
-
-	val gbill = feed(bill_details)
-	.exec(getBill)
-
-	val gbiller = feed(biller_details)
-	.exec(getBiller)
-
-    val guserbill = feed(bill_details)
-    .exec(getUserBill)
-
-	}
+		.contentTypeHeader("application/json")
+    .userAgentHeader("PostmanRuntime/7.26.8")
 
     
-    val pay = feed(bill_details)
-    .exec(getBill)
-    .feed(pay_details)
-    .exec(payBill)
+	val headers_0 = Map("Postman-Token" -> "c6804e01-935b-4367-8b10-60b6f888cfe8")
+
+	val headers_1 = Map("Postman-Token" -> "6c30a572-7c14-4eaa-bf0b-d6b5fcdb09fc")
 
 
-    // Assign roles
-    val admins = scenario("Admins")
-    .forever(){
-		repeat(20){
-			exec(Create.cuser, Create.cbiller, Get.guser, Get.gbiller)
-		}
-    }
-    val billers = scenario("Billers")
-    .forever(){
-		repeat(20){
-			 exec(Create.cbill, Get.gbill)
-		}
-       
-    }
-    val users = scenario("Users")
-    .forever(){
-		repeat(20){
-			exec(Get.guserbill,pay)
-		}
-    }
 
-    setUp(admins.inject(atOnceUsers(20)),
-        billers.inject(atOnceUsers(20)),
-        users.inject(atOnceUsers(10))).protocols(httpProtocol).maxDuration(30 minutes)
-	
+	val scn =  scenario("RecordedSimulation").repeat(20){
+    forever(){
+		  exec(http("Create User")
+			.post("/api/v1/user/")
+			// .body(ElFileBody("recordedsimulation/0000_request.json"))
+      .body(StringBody(s"""{ 
+        "fname": "Ted", 
+        "lname": "Mosby",
+        "uname": "tmosby",
+        "secquestion": "pet animal",
+        "secanswer": "duck"
+        }"""))
+      .check(status is 200)
+      .check(jsonPath("$.user_id").saveAs("user_id")))
+
+      .exec(http("Get User")
+      .get("/api/v1/user/${user_id}")
+      .check(status is 200))
+
+      .exec(http("Log in User")
+      .put("/api/v1/user/login")
+      .body(StringBody(s"""{
+        "uid": session => session("user_id").as[String]
+        }"""
+        ))
+      .check(bodyString.saveAs("jwt"))
+      .check(status is 200))
+
+      .exec(http("Create Biller")
+			.post("/api/v1/biller/")
+			.body(StringBody(s"""{ 
+        "biller": "BC Hydro", 
+        "description": "Electricity"
+        }"""))
+      .check(status is 200)
+      .check(jsonPath("$.biller_id").saveAs("biller_id")))
+
+      .exec(http("Get Biller")
+      .get("/api/v1/biller/${biller_id}")
+      .check(status is 200))
+
+      .exec(http("Create Bill")
+      .post("/api/v1/bill/")
+      .body(StringBody(s"""{
+        "user_id": "0jc337ea-f637-4dbf-b1df-6cfd153b5b5m",
+        "biller_id": "9hc337ea-f637-4dbf-b1df-6cfd153b5b4k",
+        "bill_amount": "50",
+        "due_date": "March 25 2021",
+        "bill_paid": "false"
+        }"""
+        ))
+      .check(status is 200)
+      .check(jsonPath("$.bill_id").saveAs("bill_id")))
+
+      .exec(http("Get Bill")
+      .get("/api/v1/bill/${bill_id}")
+      .check(status is 200))
+
+      .exec(http("Get Bills for User")
+      .get("/api/v1/bill/users/${user_id}")
+      .check(status is 200))
+
+      .exec(http("Pay Bill")
+      .put("/api/v1/bill/pay/${bill_id}")
+      .body(StringBody(s"""{
+        "cc_number": "450556789349966",
+        "cc_exp_date": "April 5 2024",
+        "bill_paid": "true"
+        }"""
+        ))
+      .check(status is 200))
+
+      .exec(http("Delete Bill")
+      .delete("/api/v1/bill/${bill_id}")
+      .check(status is 200))
+
+      .exec(http("Delete Biller")
+      .delete("/api/v1/biller/${biller_id}")
+      .check(status is 200))
+
+      .exec(http("Update User")
+      .put("/api/v1/user/${user_id}")
+      .body(StringBody(s"""{ 
+        "fname": "Ted", 
+        "lname": "Mosby",
+        "uname": "tmosby",
+        "secquestion": "favourite car",
+        "secanswer": "ford"
+        }"""))
+      .check(status is 200))
+
+      .exec(http("Logoff User")
+      .put("/api/v1/user/logoff")
+      .body(StringBody(s"""{
+        "jwt": session => session("jwt").as[String]
+        }"""
+        ))
+      .check(status is 200))
+
+      .exec(http("Delete User")
+      .delete("/api/v1/user/${user_id}")
+      .check(status is 200))
+      }
+  }
+
+    setUp(scn.inject(atOnceUsers(50))).protocols(httpProtocol).maxDuration(30 minutes)
+
 }
