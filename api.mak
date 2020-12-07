@@ -38,13 +38,15 @@ logs:
 
 # Minikube External IP
 # IGW=10.108.29.202:80
-IGW=127.0.0.1:80
+
+# Minikube Docker IP
+#IGW=127.0.0.1:80
 
 # AWS External IP	
 #IGW=aa950744aa9db4c21b66eece5344f695-1630890617.us-east-1.elb.amazonaws.com:80
 
 # Azure External IP
-#IGW=52.149.246.230:80
+IGW=20.151.27.234:80
 
 
 # stock body & fragment for API requests

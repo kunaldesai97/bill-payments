@@ -1,0 +1,7 @@
+<--------------------- Istio Circuit Breaker ------------------------>
+
+1. Create a destination rule for a service like user
+2. Apply destination rule (user_destination.yaml) to Kubernetes: make -f k8s.mak circuit.breaker
+3. Verify destination rule: make -f k8s.mak verify.cb
+4. Run the LoadSimulation again using Gatling (./gatling.sh)
+5. Observe the failed calls for the service for which the destination rule is specified
