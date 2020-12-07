@@ -22,6 +22,9 @@ DK=docker
 # these might need to change
 NS=termproject
 
+# Circuit Breaker istio configuration
+CONTAINER = usercontainer
+DESTINATION_RULE = code/user/user_destination.yaml
 
 deploy: gw s1 s2 db
 	$(KC) get gw,deploy,svc,pods
@@ -41,6 +44,11 @@ allyaml:
 	$(KC) -n $(NS) apply -f code/biller/biller.yaml
 	$(KC) -n $(NS) apply -f IaC/k8s/service-gateway.yaml
 	
+circuit.breaker:
+	$(KC) -n $(NS) apply -f $(DESTINATION_RULE)
+
+verify.cb:
+	$(KC) get destinationrule $(CONTAINER) -o yaml
 
 gw.svc.log:
 	$(KC) -n $(NS) apply -f misc/service-gateway.yaml | tee gw.svc.log
