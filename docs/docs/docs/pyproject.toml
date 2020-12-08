@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "My Bill Payments"
+version = "0.1"
+description = "CMPT 756 - Fall 2020 - Final Project"
+authors = ["T4-Wednesday group"]
+maintainers = [
+    "Kunal Niranjan Desai <kdesai@sfu.ca>", 
+    "Rohan Harode <rharode@sfu.ca>",
+    "Juan Ospina <jospina@sfu.ca>"    
+]
+
+license = "MIT"
+
+readme = "README.md"  # Markdown files are supported
+
+repository = "https://github.com/scp-2020-sept-cmpt-756/term-project-t4-wednesday"
+homepage = "https://github.com/scp-2020-sept-cmpt-756/term-project-t4-wednesday"
+
+keywords = ["kubernetes", "istio", "big data", "service mesh", "docker", "containers"]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Topic :: Software Development :: Build Tools",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research"    
+]
+
+[tool.poetry.dependencies]
+python = "^3.6.1"
+
+
+[tool.black]
+line-length = 100
+target-version = ['py36', 'py37']
+exclude = '''
+(
+    /(
+        \.eggs
+    | \.git
+    | \.pytype
+    | \.pytest_cache
+    | build
+    | dist
+    )/
+)
+'''
+
+[build-system]
+requires = ["poetry>=1"]
+build-backend = "poetry.masonry.api"
