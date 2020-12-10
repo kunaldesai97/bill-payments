@@ -112,7 +112,7 @@ class LoadSimulation extends Simulation {
       .body(StringBody("""{
         "cc_number": "${cc_number}",
         "cc_exp_date": "${cc_exp_date}",
-        "bill_paid": "${bill_paid}"
+        "bill_paid": "true"
         }"""
         ))
       .check(status is 200))
