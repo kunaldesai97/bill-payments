@@ -1,4 +1,4 @@
-"bill_id","bill_amount","bill_paid","biller_id","due_date","user_id"
+"id","bill_amount","bill_paid","billerid","due_date","userid"
 "97558999-5ccd-4ffd-b9d2-03e8be57ba74","50","false","56bc2830-caeb-4931-8454-a9aa3dd9c3d4","March 25 2021","0jc337ea-f637-4dbf-b1df-6cfd153b5b5m"
 "b21c672a-9ad9-4f1c-b87d-d80faff6d843","30","false","e3091998-9395-458a-ba00-44852e119cf6","January 22 2021","9hc337ea-f637-4dbf-b1df-6cfd153b5b4k"
 "c22c672a-9ad9-4f1c-b87d-d80faff6d111","5","false","f4441998-9395-458a-ba00-44852e119cg7","February 22 2021","1kc337ea-f637-4dbf-b1df-6cfd153b5b6n"
