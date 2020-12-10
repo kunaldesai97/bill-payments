@@ -1,0 +1,37 @@
+#
+# SFU CMPT 756.203
+#
+# k8s yaml to deploy a service:
+#   1 Gateway - this is the point of control for what goes in or out of the
+#     cluster
+#   1 VirtualService - this opens up the logic
+#
+# Notes:
+#
+# 1. the Gateway's .spec.servers.port.number is where istio will serve the API.
+#    This means that you can move the service around publically irrespective of
+#    the actual implementation.
+# 2. Deployment's .spec.http.match.uri & .rewrite.uri allows you to publish/implement
+#    a public API path while routing to a private/legacy path.
+#
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: usercontainer
+spec:
+  host: usercontainer
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 1
+      http:
+        http1MaxPendingRequests: 1
+        maxRequestsPerConnection: 1
+    outlierDetection:
+      consecutiveErrors: 1
+      interval: 1s
+      baseEjectionTime: 3m
+      maxEjectionPercent: 100
+
+
+
