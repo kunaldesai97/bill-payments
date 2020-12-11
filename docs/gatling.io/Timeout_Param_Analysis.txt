@@ -1,0 +1,5 @@
+<--------------------- Istio Timeout ------------------------>
+
+1. Apply manifest file: (service-gateway-timeout.yaml) to Kubernetes: make -f k8s.mak service-gateway-timeout.yaml
+2. Run the LoadSimulation again using Gatling (./gatling.sh)
+3. Observe the failed calls for the service for which the destination rule is specified
