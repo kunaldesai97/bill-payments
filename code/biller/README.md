@@ -1,2 +1,2 @@
-# Bill Service
-Biller Service in python.
+# CMPT 756 - Project - Biller service
+Biller service
